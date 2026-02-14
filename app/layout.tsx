@@ -38,22 +38,20 @@ export default function RootLayout({
       {/* ① body → flex-col y min-h-screen  */}
       <body
         className={clsx(
-          "min-h-screen flex flex-col bg-background font-sans antialiased text-foreground",
+          "min-h-screen bg-background font-sans antialiased text-foreground",
           fontSans.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          {/* ─── Header fijo ─── */}
-          <header className="fixed inset-x-0 top-0 z-50">
-            <Navbar />
-          </header>
-
-          {/* ② main se expande para rellenar el espacio libre */}
-          {/*    pt-20 = alto del header (ajusta si tu barra cambia)     */}
-          <main className="flex-grow pt-20">{children}</main>
-
-          {/* ─── Footer siempre al fondo ─── */}
-          <Footer />
+          <div className="relative flex flex-col min-h-screen">
+            <header className="sticky top-0 z-50 w-full">
+              <Navbar />
+            </header>
+            <main className="container mx-auto max-w-7xl pt-6 px-6 flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>
