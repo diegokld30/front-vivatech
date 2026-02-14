@@ -9,21 +9,22 @@ import {
     Button
 } from "@heroui/react";
 import { ChevronDownIcon } from "@/components/icons";
-import { Product } from "@/types/api";
+import { Category } from "@/types/api";
 import { useState, useEffect } from "react";
-import { fetchProducts } from "@/lib/api";
+import { fetchCategories } from "@/lib/api";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 
 export const ProductsDropdown = () => {
-    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
     const pathname = usePathname();
     const isActive = pathname.startsWith("/productos");
 
     useEffect(() => {
-        fetchProducts()
-            .then(setProducts)
-            .catch((err) => console.error("Error cargando productos:", err));
+        // Obtenemos categorías en lugar de productos
+        fetchCategories()
+            .then(setCategories)
+            .catch((err) => console.error("Error cargando categorías:", err));
     }, []);
 
     return (
@@ -43,30 +44,28 @@ export const ProductsDropdown = () => {
                 </Button>
             </DropdownTrigger>
             <DropdownMenu
-                aria-label="Productos"
+                aria-label="Categorías de Productos"
                 className="w-[340px]"
                 itemClasses={{ base: "gap-4" }}
             >
-                <DropdownSection title="Destacados" showDivider>
-                    {products.length > 0 ? (
-                        // @ts-ignore
-                        products.slice(0, 5).map((p) => (
+                <DropdownSection title="Categorías" showDivider>
+                    {categories.length > 0 ? (
+                        categories.map((c) => (
                             <DropdownItem
-                                key={p.id}
-                                description={p.short_desc?.slice(0, 50) + "..."}
-                                href={`/productos/${p.slug}`}
+                                key={c.id}
+                                href={`/productos?category=${c.slug}`}
                             >
-                                {p.name}
+                                {c.name}
                             </DropdownItem>
                         ))
                     ) : (
                         <DropdownItem key="loading" isReadOnly>
-                            Cargando productos...
+                            Cargando categorías...
                         </DropdownItem>
                     )}
                 </DropdownSection>
 
-                <DropdownSection title="Más opciones">
+                <DropdownSection title="Opciones">
                     <DropdownItem
                         key="all"
                         href="/productos"

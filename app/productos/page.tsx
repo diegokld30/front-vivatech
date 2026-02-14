@@ -1,5 +1,5 @@
 import { title } from "@/components/primitives";
-import ProductCard from "@/components/ProductCard";
+import ProductosClient from "./ProductosClient";
 import { fetchProducts, fetchCategories } from "@/lib/api";
 import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductCarousel } from "@/components/product-carousel";
@@ -36,34 +36,12 @@ export default async function ProductosPage({
           <CategorySidebar categories={categories} />
         </aside>
 
-        {/* 3. Grid de Productos (Derecha) */}
-        <div className="flex-grow">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold">
-              {categorySlug
-                ? categories.find(c => c.slug === categorySlug)?.name || "Productos"
-                : "Todos los productos"
-              }
-            </h1>
-            <p className="text-default-500 text-sm">Mostrando {gridProducts.length} resultados</p>
-          </div>
-
-          {gridProducts.length > 0 ? (
-            <div
-              className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
-            >
-              {gridProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 bg-default-50 rounded-xl">
-              <p className="text-xl text-default-500">
-                No se encontraron productos en esta categoría.
-              </p>
-            </div>
-          )}
-        </div>
+        {/* 3. Grid de Productos (Cliente: Maneja Modal y Deep Linking) */}
+        <ProductosClient
+          gridProducts={gridProducts}
+          categories={categories}
+          categorySlug={categorySlug}
+        />
       </div>
     </section>
   );

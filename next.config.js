@@ -25,6 +25,13 @@ module.exports = {
         port: "",                                // any port
         pathname: "/media/**",
       },
+      /* Fix Docker interne */
+      {
+        protocol: "http",
+        hostname: "api-vivatech",
+        port: "8000",
+        pathname: "/media/**",
+      },
       /* mapa estático de wikimedia              */
       {
         protocol: "https",

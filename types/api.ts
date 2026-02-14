@@ -35,6 +35,13 @@ export interface BlogPost {
   cover_image: string | null;
   published_at: string;   // ISO string
 }
+
+export interface BlogSidebarImage {
+  id: number;
+  title: string;
+  image: string;
+  is_active: boolean;
+}
 /* ---------- FAQs ---------- */
 export interface Faq {
   id: number;

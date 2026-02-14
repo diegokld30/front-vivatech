@@ -41,13 +41,17 @@ export const fetchCategories = () =>
 
 /* -------------------------  Blog  ----------------------------------- */
 export const fetchPosts = () =>
-  fetch(`${INTERNAL_API}/posts/`, { cache: "no-store" })
+  fetch(`${INTERNAL_API}/blog/posts/`, { cache: "no-store" })
     .then(toJSON<BlogPost[]>);
 
 export const fetchPost = (slug: string) =>
-  fetch(`${INTERNAL_API}/posts/?slug=${slug}`)
+  fetch(`${INTERNAL_API}/blog/posts/?slug=${slug}`)
     .then(r => r.json())
     .then((data: BlogPost[]) => data[0] ?? null);
+
+export const fetchBlogSidebarImages = () =>
+  fetch(`${INTERNAL_API}/blog/sidebar-images/?is_active=true`, { cache: "no-store" })
+    .then(toJSON<import("@/types/api").BlogSidebarImage[]>);
 
 /* -------------------------  FAQs  ----------------------------------- */
 export const fetchFaqs = () =>
