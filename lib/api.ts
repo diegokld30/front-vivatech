@@ -1,56 +1,60 @@
-/* lib/api.ts */
-import type { Product } from "@/types/api";
-import type { BlogPost } from "@/types/api";
-import type { Faq } from "@/types/api";
-import type { Client } from "@/types/api";
+/* lib/api.ts ------------------------------------------------------------*/
+import type { Product, BlogPost, Faq, Client, Category } from "@/types/api";
 
-const API = process.env.NEXT_PUBLIC_API_URL!;
+/**
+ *  ───────────────────────────────────────────────────────────────────
+ *  ▸ PUBLIC_API  →  lo que usa el navegador (NEXT_PUBLIC_API_URL)
+ *  ▸ INTERNAL    →  disponible durante next build / SSR
+ *                  (se define como INTERNAL_API_URL en docker‑compose)
+ *  Si INTERNAL_API_URL no existe, usamos la pública (útil en local).
+ *  ───────────────────────────────────────────────────────────────────
+ */
+const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const INTERNAL_API = (typeof window === "undefined" && process.env.INTERNAL_API_URL)
+  ? process.env.INTERNAL_API_URL
+  : PUBLIC_API;
 
-/* Productos */
-export async function fetchProducts(): Promise<Product[]> {
-  const res = await fetch(`${API}/productos/`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Error cargando productos");
-  return res.json();
-}
+/* Utilidad para parsear JSON con control de error */
+const toJSON = async <T>(r: Response): Promise<T> => {
+  if (!r.ok) throw new Error(`Fetch error → ${r.status} ${r.statusText}`);
+  let text = await r.text();
 
-/* ------------- BLOG ------------- */
-export async function fetchPosts(): Promise<BlogPost[]> {
-  const res = await fetch(`${API}/posts/`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Error cargando posts");
-  return res.json();
-}
+  // Fix Robusto: Reemplazar SIEMPRE (cliente y servidor) la URL interna
+  // para que las imágenes sean accesibles desde el navegador.
+  return JSON.parse(
+    text.replace(/http:\/\/api-vivatech:8000/g, "http://localhost:8000")
+  ) as T;
+};
 
-export async function fetchPost(slug: string): Promise<BlogPost | null> {
-  const res = await fetch(`${API}/posts/?slug=${slug}`);
-  const data = await res.json();
-  return data[0] ?? null;
-}
+/* -------------------------  Productos  ------------------------------- */
+export const fetchProducts = (categorySlug?: string) => {
+  let url = `${INTERNAL_API}/productos/`;
+  if (categorySlug) {
+    url += `?category=${categorySlug}`;
+  }
+  return fetch(url, { cache: "no-store" }).then(r => toJSON<Product[]>(r));
+};
 
-/* ---------- FAQs ---------- */
-// export async function fetchFaqs(): Promise<Faq[]> {
-//   const res = await fetch(
-//     `${process.env.NEXT_PUBLIC_API_URL}/faqs/`,
-//     { next: { revalidate: 60 * 60 } }  // 1 h
-//   );
-//   if (!res.ok) throw new Error("Error al cargar FAQs");
-//   return res.json();
-// }
+export const fetchCategories = () =>
+  fetch(`${INTERNAL_API}/categorias/`, { cache: "no-store" })
+    .then(r => toJSON<Category[]>(r));
 
-export async function fetchFaqs(): Promise<Faq[]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/faqs/`,
-    { cache: "no-store" }     // ← sin caché
-  );
-  if (!res.ok) throw new Error("Error al cargar FAQs");
-  return res.json();
-}
+/* -------------------------  Blog  ----------------------------------- */
+export const fetchPosts = () =>
+  fetch(`${INTERNAL_API}/posts/`, { cache: "no-store" })
+    .then(toJSON<BlogPost[]>);
 
-/* Clientes -------------------------------------------------------------- */
+export const fetchPost = (slug: string) =>
+  fetch(`${INTERNAL_API}/posts/?slug=${slug}`)
+    .then(r => r.json())
+    .then((data: BlogPost[]) => data[0] ?? null);
 
-export async function fetchClients(): Promise<Client[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/clientes/`, {
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error("Error al cargar clientes");
-  return res.json();
-}
+/* -------------------------  FAQs  ----------------------------------- */
+export const fetchFaqs = () =>
+  fetch(`${INTERNAL_API}/faqs/`, { cache: "no-store" })
+    .then(toJSON<Faq[]>);
+
+/* -------------------------  Clientes  ------------------------------- */
+export const fetchClients = () =>
+  fetch(`${INTERNAL_API}/clientes/`, { cache: "no-store" })
+    .then(toJSON<Client[]>);

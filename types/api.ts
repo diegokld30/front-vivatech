@@ -6,14 +6,24 @@ export interface ProductImage {
   alt: string | null;
 }
 
+export interface Category {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 export interface Product {
   id: number;
   name: string;
+  slug: string;
+  category?: Category;    // puede venir null
   cover: string | null;   // portada puede ser null
   short_desc: string;
   description: string;
   price: string;          // llega como string desde la API
   gallery: ProductImage[]; // siempre array (vacío si no hay fotos)
+  video_url?: string;
+  specifications?: Record<string, string>;
 }
 /* ---------- BLOG ---------- */
 export interface BlogPost {

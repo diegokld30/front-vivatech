@@ -1,22 +1,18 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { fetchPost, fetchPosts } from "@/lib/api";
+import { fetchPost } from "@/lib/api";
 import type { BlogPost } from "@/types/api";
 
-export async function generateStaticParams() {
-  const posts = await fetchPosts();
-  return posts.map((p) => ({ slug: p.slug }));
-}
-
-export const dynamicParams = true; // nuevas entradas sin rebuild
+export const dynamicParams = true;         // nuevos slugs sin rebuild
+export const dynamic = "force-dynamic";    // ← quítalo si quieres SSG
 
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const post: BlogPost | null = await fetchPost(params.slug);
-
+  const { slug } = await params;
+  const post: BlogPost | null = await fetchPost(slug);
   if (!post) return notFound();
 
   return (

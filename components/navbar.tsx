@@ -17,9 +17,10 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { WhatsAppIcon, Logo } from "@/components/icons";
-import { useScrolled } from "@/components/useScrolled"; // hook del scroll
+import { useScrolled } from "@/components/useScrolled";
 import Image from "next/image";
+
+import { ProductsDropdown } from "@/components/products-dropdown";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -27,7 +28,7 @@ export const Navbar = () => {
 
   return (
     <HNavbar
-      position="static" // header ya es fixed en layout
+      position="static"
       className={clsx(
         "transition-colors duration-300",
         scrolled ? "bg-white/90 backdrop-blur-md shadow-md" : "bg-transparent"
@@ -37,13 +38,13 @@ export const Navbar = () => {
       {/* ——— Brand ——— */}
       <NavbarBrand as="li" className="gap-2">
         <NextLink href="/" className="flex items-center">
-          {/* <Logo className="w-8 h-8 text-primary-600" /> */}
           <Image
-            src="/logoVivatechGrande.png" 
+            src="/logoVivatechGrande.png"
             alt="Vivatech, tecnología para el campo"
-            width={140} // ajusta según se vea bien
+            width={140}
             height={40}
             priority
+            className="h-10 w-auto"
           />
         </NextLink>
       </NavbarBrand>
@@ -51,6 +52,16 @@ export const Navbar = () => {
       {/* ——— Desktop nav ——— */}
       <NavbarContent className="hidden lg:flex gap-6 ml-6" justify="start">
         {siteConfig.navItems.map((item) => {
+          // Lógica especial para "Productos" -> Dropdown
+          if (item.label === "Productos") {
+            return (
+              <NavbarItem key={item.href}>
+                <ProductsDropdown />
+              </NavbarItem>
+            );
+          }
+
+          // Ítems normales
           const active = pathname === item.href;
           return (
             <NavbarItem key={item.href} className="relative">
@@ -76,18 +87,7 @@ export const Navbar = () => {
 
       {/* ——— Right actions ——— */}
       <NavbarContent justify="end" className="hidden sm:flex gap-4">
-        {/* WhatsApp */}
-        {/* <Link
-          isExternal
-          aria-label="WhatsApp"
-          href="https://wa.me/57XXXXXXXXX"
-          className="text-primary-600 hover:text-primary-700"
-        >
-          <WhatsAppIcon className="h-5 w-5" />
-        </Link> */}
         <ThemeSwitch />
-
-        {/* CTA */}
         <Button
           as={Link}
           href="/contact"
@@ -108,7 +108,7 @@ export const Navbar = () => {
       {/* ——— Mobile menu ——— */}
       <NavbarMenu>
         <div className="flex flex-col mt-4 gap-3">
-          {siteConfig.navItems.map((item) => (
+          {siteConfig.navMenuItems.map((item) => (
             <NavbarMenuItem key={item.href}>
               <Link
                 href={item.href}
@@ -120,8 +120,6 @@ export const Navbar = () => {
               </Link>
             </NavbarMenuItem>
           ))}
-
-          {/* CTA al fondo */}
           <Button
             as={Link}
             href="/contacto"
