@@ -1,11 +1,34 @@
-import { title } from "@/components/primitives";
+import type { Metadata } from "next";
+
 import ProductosClient from "./ProductosClient";
-import { fetchProducts, fetchCategories, fetchProductCarouselImages } from "@/lib/api";
+
+import {
+  fetchProducts,
+  fetchCategories,
+  fetchProductCarouselImages,
+} from "@/lib/api";
 import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductCarousel } from "@/components/product-carousel";
-import type { Product, Category } from "@/types/api";
 
-export const metadata = { title: "Productos – Vivatech" };
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://vivatech.com.co"
+).replace(/\/$/, "");
+
+export const metadata: Metadata = {
+  title: "Productos – Vivatech",
+  description:
+    "Explora el catálogo de maquinaria agrícola Vivatech: equipos para optimizar tu productividad en el campo.",
+  alternates: {
+    canonical: `${SITE_URL}/productos`,
+  },
+  openGraph: {
+    title: "Productos – Vivatech",
+    description:
+      "Catálogo de maquinaria agrícola Vivatech con categorías y productos actualizados.",
+    type: "website",
+    url: `${SITE_URL}/productos`,
+  },
+};
 export const dynamic = "force-dynamic";
 
 export default async function ProductosPage({
@@ -25,8 +48,31 @@ export default async function ProductosPage({
     fetchProductCarouselImages(),
   ]);
 
+  const productsSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Productos Vivatech",
+    description:
+      "Catálogo de maquinaria agrícola y tecnología para el campo de Vivatech.",
+    url: `${SITE_URL}/productos`,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: gridProducts.slice(0, 24).map((product, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: product.name,
+        url: `${SITE_URL}/productos/${encodeURIComponent(product.slug)}`,
+      })),
+    },
+  };
+
   return (
     <section className="max-w-screen-2xl mx-auto px-4 pb-12">
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productsSchema) }}
+        type="application/ld+json"
+      />
+
       {/* 1. Carrusel Superior */}
       <ProductCarousel images={carouselImages} />
 
@@ -38,9 +84,9 @@ export default async function ProductosPage({
 
         {/* 3. Grid de Productos (Cliente: Maneja Modal y Deep Linking) */}
         <ProductosClient
-          gridProducts={gridProducts}
           categories={categories}
           categorySlug={categorySlug}
+          gridProducts={gridProducts}
         />
       </div>
     </section>

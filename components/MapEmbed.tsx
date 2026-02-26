@@ -9,13 +9,13 @@ interface Props {
 
 const MapEmbed: FC<Props> = ({ lat, lng, className }) => {
   const delta = 0.01;
-  const left   = lng - delta;
-  const right  = lng + delta;
-  const top    = lat + delta;
+  const left = lng - delta;
+  const right = lng + delta;
+  const top = lat + delta;
   const bottom = lat - delta;
 
   const bbox = `${left},${bottom},${right},${top}`;
-  const src  =
+  const src =
     `https://www.openstreetmap.org/export/embed.html` +
     `?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
 
@@ -23,11 +23,11 @@ const MapEmbed: FC<Props> = ({ lat, lng, className }) => {
     <div className={className}>
       <iframe
         key={bbox}
+        className="w-full aspect-[16/9] rounded-lg border-none"
+        referrerPolicy="no-referrer-when-downgrade"
         src={src}
         title={`Mapa ubicación (${lat}, ${lng})`}   /* ✅ evita error ESLint */
         loading="lazy"
-        className="w-full aspect-[16/9] rounded-lg border-none"
-        referrerPolicy="no-referrer-when-downgrade"
       />
     </div>
   );

@@ -2,39 +2,72 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://vivatech.com.co";
+const BASE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || "https://vivatech.com.co"
+).replace(/\/$/, "");
+const API_BASE = (
+  process.env.INTERNAL_API_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:8000/api"
+).replace(/\/$/, "");
 
-// pide al backend las listas de slug para generar <url>
-async function fetchSlugs(apiPath: string): Promise<string[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${apiPath}/?is_active=true`, {
-    next: { revalidate: 60 * 60 * 24 },  // 1 día
+type BlogPostForSitemap = {
+  slug: string;
+  published_at?: string | null;
+};
+
+type UrlItem = {
+  loc: string;
+  changefreq: "daily" | "weekly" | "monthly";
+  priority: string;
+  lastmod?: string;
+};
+
+const ONE_DAY = 60 * 60 * 24;
+
+function escapeXml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+// Pide al backend slugs para generar rutas dinámicas existentes.
+async function fetchBlogPosts(): Promise<BlogPostForSitemap[]> {
+  const response = await fetch(`${API_BASE}/blog/posts/`, {
+    next: { revalidate: ONE_DAY },
   });
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.map((item: { slug: string }) => item.slug);
+
+  if (!response.ok) return [];
+  const data = (await response.json()) as BlogPostForSitemap[];
+
+  return Array.isArray(data) ? data : [];
 }
 
 export async function GET(_req: NextRequest) {
-  /* 1. Rutas estáticas */
-  const staticPages = ["", "productos", "blog", "faqs", "clients"].map(
-    (path) => `${BASE_URL}/${path}`
-  );
-
-  /* 2. Rutas dinámicas desde la API */
-  const [productSlugs, postSlugs, clientSlugs] = await Promise.all([
-    fetchSlugs("productos"),
-    fetchSlugs("posts"),
-    fetchSlugs("clientes"),
-  ]);
-
-  const urls: string[] = [
-    ...staticPages,
-    ...productSlugs.map((s) => `${BASE_URL}/productos/${s}`),
-    ...postSlugs.map((s) => `${BASE_URL}/blog/${s}`),
-    ...clientSlugs.map((s) => `${BASE_URL}/clients/${s}`),
+  const staticPages: UrlItem[] = [
+    { changefreq: "weekly", loc: `${BASE_URL}/`, priority: "1.0" },
+    { changefreq: "daily", loc: `${BASE_URL}/productos`, priority: "0.95" },
+    { changefreq: "weekly", loc: `${BASE_URL}/clients`, priority: "0.85" },
+    { changefreq: "weekly", loc: `${BASE_URL}/faqs`, priority: "0.85" },
+    { changefreq: "daily", loc: `${BASE_URL}/blog`, priority: "0.9" },
+    { changefreq: "monthly", loc: `${BASE_URL}/about`, priority: "0.7" },
+    { changefreq: "weekly", loc: `${BASE_URL}/contact`, priority: "0.8" },
   ];
 
-  /* 3. Construir XML */
+  const blogPosts = await fetchBlogPosts();
+
+  const blogUrls: UrlItem[] = blogPosts.map((post) => ({
+    changefreq: "weekly",
+    lastmod: post.published_at || undefined,
+    loc: `${BASE_URL}/blog/${post.slug}`,
+    priority: "0.8",
+  }));
+
+  const urls: UrlItem[] = [...staticPages, ...blogUrls];
+
   const body =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
@@ -42,9 +75,11 @@ export async function GET(_req: NextRequest) {
       .map(
         (url) => `
   <url>
-    <loc>${url}</loc>
-    <changefreq>weekly</changefreq>
-  </url>`
+    <loc>${escapeXml(url.loc)}</loc>
+    <changefreq>${url.changefreq}</changefreq>
+    <priority>${url.priority}</priority>
+    ${url.lastmod ? `<lastmod>${new Date(url.lastmod).toISOString()}</lastmod>` : ""}
+  </url>`,
       )
       .join("") +
     `\n</urlset>`;

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "@heroui/button";
+
 import { title, subtitle } from "@/components/primitives";
 
 export const metadata = {
@@ -12,16 +13,16 @@ export default function Home() {
   return (
     /* ───── FULL-BLEED WRAPPER ─────
        rompe los márgenes de <main class="container …">   */
-    <div className="relative w-screen left-1/2 right-1/2 -translate-x-1/2 overflow-hidden">
+    <div className="relative -mt-6 w-screen left-1/2 right-1/2 -translate-x-1/2 overflow-hidden">
       <section className="relative h-[92vh] flex flex-col items-center justify-center text-white">
         {/* Imagen de fondo  */}
         <Image
-          src="/vivatechEntrada.png" /* debe existir en /public */
-          alt="Maquinaria agrícola Vivatech"
           fill
           priority
-          sizes="100vw"
           className="object-cover object-center -z-20 select-none pointer-events-none"
+          sizes="100vw"
+          src="/vivatechEntrada.png" /* debe existir en /public */
+          alt="Maquinaria agrícola Vivatech"
         />
 
         {/* Degradado verde semitransparente */}
@@ -50,24 +51,24 @@ export default function Home() {
         {/* Botones */}
         <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-4">
           <Button
-            as="a"
-            href="/catalogo.pdf"
-            color="primary"
-            size="lg" // mismo alto
-            radius="full"
-            className="shadow-lg"
             download
+            as="a"
+            className="shadow-lg"
+            color="primary"
+            href="/catalogo.pdf"
+            radius="full"
+            size="lg" // mismo alto
           >
             Descargar catálogo
           </Button>
 
           <Button
             as="a"
-            href="/productos"
-            variant="bordered"
             color="primary"
-            size="lg" // mismo alto
+            href="/productos"
             radius="full"
+            size="lg" // mismo alto
+            variant="bordered"
           >
             Conocer más
           </Button>

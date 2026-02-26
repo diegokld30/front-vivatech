@@ -1,5 +1,6 @@
-import { title, subtitle } from "@/components/primitives";
 import ContactSection from "./ContactSection";
+
+import { subtitle } from "@/components/primitives";
 
 export const metadata = {
   title: "Contáctanos – Vivatech",

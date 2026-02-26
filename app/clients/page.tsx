@@ -1,7 +1,8 @@
+import type { Client } from "@/types/api";
+
 import { title, subtitle } from "@/components/primitives";
 import { fetchClients } from "@/lib/api";
 import ClientCard from "@/components/ClientCard";
-import type { Client } from "@/types/api";
 
 export const metadata = { title: "Clientes – Vivatech" };
 
@@ -13,7 +14,8 @@ export default async function ClientsPage() {
       <header className="space-y-4">
         <h1 className={title()}>Nuestros clientes</h1>
         <p className={subtitle()}>
-          Conoce cómo nuestra tecnología ha transformado fincas en toda Latinoamérica.
+          Conoce cómo nuestra tecnología ha transformado fincas en toda
+          Latinoamérica.
         </p>
       </header>
 

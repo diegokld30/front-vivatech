@@ -2,7 +2,7 @@
 /* ---------- PRODUCT ---------- */
 export interface ProductImage {
   id: number;
-  image: string;          // URL absoluta que devuelve DRF
+  image: string; // URL absoluta que devuelve DRF
   alt: string | null;
 }
 
@@ -16,11 +16,11 @@ export interface Product {
   id: number;
   name: string;
   slug: string;
-  category?: Category;    // puede venir null
-  cover: string | null;   // portada puede ser null
+  category?: Category; // puede venir null
+  cover: string | null; // portada puede ser null
   short_desc: string;
   description: string;
-  price: string;          // llega como string desde la API
+  price: string; // llega como string desde la API
   gallery: ProductImage[]; // siempre array (vacío si no hay fotos)
   video_url?: string;
   specifications?: Record<string, string>;
@@ -41,9 +41,9 @@ export interface BlogPost {
   title: string;
   slug: string;
   excerpt: string;
-  content: string;        // HTML o Markdown renderizado por DRF
+  content: string; // HTML o Markdown renderizado por DRF
   cover_image: string | null;
-  published_at: string;   // ISO string
+  published_at: string; // ISO string
 }
 
 export interface BlogSidebarImage {
@@ -58,7 +58,6 @@ export interface Faq {
   question: string;
   answer: string;
 }
-
 
 /* --- CLIENTES ----------------------------------------------------------- */
 

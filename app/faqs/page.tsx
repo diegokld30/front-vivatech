@@ -1,7 +1,8 @@
-import { title, subtitle } from "@/components/primitives";
-import { fetchFaqs } from "@/lib/api";
-import FaqAccordion from "@/components/FaqAccordion";   // ← importa directo
 import type { Faq } from "@/types/api";
+
+import { subtitle } from "@/components/primitives";
+import { fetchFaqs } from "@/lib/api";
+import FaqAccordion from "@/components/FaqAccordion"; // ← importa directo
 
 /* ----------- META ---------- */
 export const metadata = {
@@ -18,7 +19,6 @@ export default async function FaqPage() {
 
   return (
     <section className="space-y-10 ">
-     
       <p className={subtitle()}>
         ¿Tienes alguna duda? Encuentra aquí todas las respuestas.
       </p>
@@ -28,8 +28,8 @@ export default async function FaqPage() {
 
       {/* ---- JSON-LD SEO ---- */}
       <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: buildFaqSchema(faqs) }}
+        type="application/ld+json"
       />
     </section>
   );

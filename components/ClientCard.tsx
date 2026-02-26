@@ -1,5 +1,7 @@
 "use client";
 
+import type { Client } from "@/types/api";
+
 import {
   Card,
   CardBody,
@@ -12,7 +14,7 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { MapPinIcon } from "lucide-react";
-import type { Client } from "@/types/api";
+
 import MapEmbed from "@/components/MapEmbed";
 
 export default function ClientCard({ client }: { client: Client }) {
@@ -24,19 +26,19 @@ export default function ClientCard({ client }: { client: Client }) {
       {/* ───── Tarjeta resumen ───── */}
       <Card
         isPressable
+        aria-label={`Caso de éxito: ${client.name}`}
+        className="w-full cursor-pointer"
         radius="lg"
         shadow="sm"
         onPress={onOpen}
-        className="w-full cursor-pointer"
-        aria-label={`Caso de éxito: ${client.name}`}
       >
         <CardBody className="flex items-center gap-4 py-3">
           <Avatar
-            src={client.logo || undefined}
-            name={client.name}
-            size="lg"
-            radius="lg"
             className="shrink-0"
+            name={client.name}
+            radius="lg"
+            size="lg"
+            src={client.logo || undefined}
           />
 
           <div className="flex-1 min-w-0">
@@ -44,7 +46,7 @@ export default function ClientCard({ client }: { client: Client }) {
 
             {client.location && (
               <p className="flex items-center gap-1 text-sm text-default-500 truncate">
-                <MapPinIcon size={16} className="shrink-0" />
+                <MapPinIcon className="shrink-0" size={16} />
                 {client.location}
               </p>
             )}
@@ -53,7 +55,7 @@ export default function ClientCard({ client }: { client: Client }) {
       </Card>
 
       {/* ───── Drawer detalle ───── */}
-      <Drawer isOpen={isOpen} onClose={onClose} size="lg">
+      <Drawer isOpen={isOpen} size="lg" onClose={onClose}>
         <DrawerContent>
           {() => (
             <>
@@ -62,7 +64,7 @@ export default function ClientCard({ client }: { client: Client }) {
 
                 {client.location && (
                   <div className="flex items-center gap-1 text-xs text-default-500">
-                    <MapPinIcon size={14} className="shrink-0" />
+                    <MapPinIcon className="shrink-0" size={14} />
                     {client.location}
                   </div>
                 )}
@@ -72,11 +74,11 @@ export default function ClientCard({ client }: { client: Client }) {
                 {/* portada */}
                 {client.cover && (
                   <Image
-                    src={client.cover}
                     alt={`Portada de ${client.name}`}
-                    width={900}
-                    height={500}
                     className="w-full aspect-[16/9] rounded-lg object-cover"
+                    height={500}
+                    src={client.cover}
+                    width={900}
                   />
                 )}
 
@@ -91,11 +93,11 @@ export default function ClientCard({ client }: { client: Client }) {
                     {client.gallery.map((img) => (
                       <li key={img.id}>
                         <Image
-                          src={img.image}
                           alt={img.alt || `Imagen ${img.id}`}
-                          width={400}
-                          height={225}
                           className="w-full aspect-[16/9] rounded-lg object-cover"
+                          height={225}
+                          src={img.image}
+                          width={400}
                         />
                       </li>
                     ))}
@@ -106,9 +108,9 @@ export default function ClientCard({ client }: { client: Client }) {
 
                 {client.latitude && client.longitude && (
                   <MapEmbed
+                    className="rounded-lg"
                     lat={parseFloat(client.latitude)}
                     lng={parseFloat(client.longitude)}
-                    className="rounded-lg"
                   />
                 )}
               </DrawerBody>

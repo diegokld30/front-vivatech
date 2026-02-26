@@ -4,6 +4,7 @@ import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
+
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
@@ -11,6 +12,9 @@ import { Footer } from "@/components/footer";
 
 /* ------------ META ------------ */
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://vivatech.com.co",
+  ),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,

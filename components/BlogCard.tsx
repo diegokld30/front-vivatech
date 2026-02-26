@@ -1,18 +1,22 @@
 "use client";
+import type { BlogPost } from "@/types/api";
+
 import { Image, Button, Card, CardHeader, CardBody } from "@heroui/react";
 import Link from "next/link";
-import type { BlogPost } from "@/types/api";
 
 export default function BlogCard({ post }: { post: BlogPost }) {
   return (
-    <Card className="h-full border-none shadow-md hover:shadow-xl transition-shadow duration-300" radius="lg">
+    <Card
+      className="h-full border-none shadow-md hover:shadow-xl transition-shadow duration-300"
+      radius="lg"
+    >
       {post.cover_image && (
         <div className="relative h-56 w-full overflow-hidden">
           <Image
-            src={post.cover_image}
-            alt={post.title}
             removeWrapper
+            alt={post.title}
             className="z-0 w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+            src={post.cover_image}
           />
         </div>
       )}
@@ -24,16 +28,14 @@ export default function BlogCard({ post }: { post: BlogPost }) {
       </CardHeader>
 
       <CardBody className="px-5 py-3 flex-grow">
-        <p className="text-default-500 text-sm line-clamp-3">
-          {post.excerpt}
-        </p>
+        <p className="text-default-500 text-sm line-clamp-3">{post.excerpt}</p>
       </CardBody>
 
       <div className="px-5 pb-5 pt-0 mt-auto">
         <Button
           as={Link}
-          href={`/blog/${post.slug}`}
           className="w-full bg-black text-white font-medium"
+          href={`/blog/${post.slug}`}
           radius="full"
           size="md"
         >

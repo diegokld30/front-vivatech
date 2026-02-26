@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import KitSolarCalculator from "@/components/KitSolarCalculator";
 
 /* -------- SEO -------- */

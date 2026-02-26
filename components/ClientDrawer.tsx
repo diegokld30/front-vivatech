@@ -1,6 +1,8 @@
 // components/ClientDrawer.tsx
 "use client";
 
+import type { Client } from "@/types/api";
+
 import {
   Drawer,
   DrawerBody,
@@ -10,7 +12,6 @@ import {
   Image,
   Button,
 } from "@heroui/react";
-import type { Client } from "@/types/api";
 
 export default function ClientDrawer({
   client,
@@ -35,10 +36,10 @@ export default function ClientDrawer({
                     <Image
                       key={img.id}
                       alt={img.alt ?? client.name}
-                      src={img.image}
                       className="aspect-video object-cover rounded-lg"
-                      width={600}
                       height={400}
+                      src={img.image}
+                      width={600}
                     />
                   ))}
                 </div>
@@ -48,10 +49,10 @@ export default function ClientDrawer({
             </DrawerBody>
 
             <DrawerFooter>
-              <Button variant="light" color="danger" onPress={close}>
+              <Button color="danger" variant="light" onPress={close}>
                 Cerrar
               </Button>
-              <Button as="a" href="/contact" color="primary">
+              <Button as="a" color="primary" href="/contact">
                 Cotizar
               </Button>
             </DrawerFooter>

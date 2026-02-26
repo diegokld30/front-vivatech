@@ -2,7 +2,6 @@ import { title } from "@/components/primitives";
 import BlogCard from "@/components/BlogCard";
 import { fetchPosts, fetchBlogSidebarImages } from "@/lib/api";
 import { BlogBanner } from "@/components/blog-banner";
-import type { BlogPost, BlogSidebarImage } from "@/types/api";
 
 export const metadata = {
   title: "Blog – Vivatech",
@@ -21,9 +20,7 @@ export default async function BlogPage() {
     <section className="max-w-7xl mx-auto px-6 pb-12">
       {/* Título Principal */}
       <div className="text-center py-12">
-        <h1 className={title({ size: "lg" })}>
-          Vive al día Con VIVATECH
-        </h1>
+        <h1 className={title({ size: "lg" })}>Vive al día Con VIVATECH</h1>
         <p className="text-default-500 mt-3 text-lg">
           Noticias, actualizaciones y consejos para tu maquinaria.
         </p>
