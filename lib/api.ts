@@ -19,12 +19,29 @@ const toJSON = async <T>(r: Response): Promise<T> => {
   if (!r.ok) throw new Error(`Fetch error → ${r.status} ${r.statusText}`);
   let text = await r.text();
 
-  // Fix Robusto: Reemplazar SIEMPRE (cliente y servidor) la URL interna
-  // para que las imágenes sean accesibles desde el navegador.
-  return JSON.parse(
-    text.replace(/http:\/\/api-vivatech:8000/g, "http://localhost:8000")
-  ) as T;
+  // Fix Robusto: Convertir URLs absolutas internas a relativas.
+  // Reemplazamos "http://api-vivatech:8000" y "http://localhost:8000" por cadena vacía.
+  // Así obtenemos "/media/imagen.jpg", que el navegador resolverá contra el dominio actual.
+  const cleanText = text.replace(/https?:\/\/(api-vivatech|localhost):8000/g, "");
+
+  try {
+    return JSON.parse(cleanText) as T;
+  } catch (e) {
+    console.error("JSON Parse Error. Cleaned Text:", cleanText);
+    throw new Error("Failed to parse JSON response");
+  }
 };
+
+const safeFetch = async <T>(url: string): Promise<T> => {
+  console.log(`[API] Fetching: ${url}`);
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    return await toJSON<T>(res);
+  } catch (error) {
+    console.error(`[API] Error fetching ${url}:`, error);
+    throw error;
+  }
+}
 
 /* -------------------------  Productos  ------------------------------- */
 export const fetchProducts = (categorySlug?: string) => {
@@ -32,33 +49,32 @@ export const fetchProducts = (categorySlug?: string) => {
   if (categorySlug) {
     url += `?category=${categorySlug}`;
   }
-  return fetch(url, { cache: "no-store" }).then(r => toJSON<Product[]>(r));
+  return safeFetch<Product[]>(url);
 };
 
 export const fetchCategories = () =>
-  fetch(`${INTERNAL_API}/categorias/`, { cache: "no-store" })
-    .then(r => toJSON<Category[]>(r));
+  safeFetch<Category[]>(`${INTERNAL_API}/categorias/`);
+
+export const fetchProductCarouselImages = () =>
+  safeFetch<import("@/types/api").ProductCarouselImage[]>(`${INTERNAL_API}/product-carousel-images/`);
 
 /* -------------------------  Blog  ----------------------------------- */
 export const fetchPosts = () =>
-  fetch(`${INTERNAL_API}/blog/posts/`, { cache: "no-store" })
-    .then(toJSON<BlogPost[]>);
+  safeFetch<BlogPost[]>(`${INTERNAL_API}/blog/posts/`);
 
 export const fetchPost = (slug: string) =>
   fetch(`${INTERNAL_API}/blog/posts/?slug=${slug}`)
     .then(r => r.json())
-    .then((data: BlogPost[]) => data[0] ?? null);
+    .then((data: BlogPost[]) => data[0] ?? null)
+    .catch(err => { console.error("fetchPost error:", err); return null; });
 
 export const fetchBlogSidebarImages = () =>
-  fetch(`${INTERNAL_API}/blog/sidebar-images/?is_active=true`, { cache: "no-store" })
-    .then(toJSON<import("@/types/api").BlogSidebarImage[]>);
+  safeFetch<import("@/types/api").BlogSidebarImage[]>(`${INTERNAL_API}/blog/sidebar-images/?is_active=true`);
 
 /* -------------------------  FAQs  ----------------------------------- */
 export const fetchFaqs = () =>
-  fetch(`${INTERNAL_API}/faqs/`, { cache: "no-store" })
-    .then(toJSON<Faq[]>);
+  safeFetch<Faq[]>(`${INTERNAL_API}/faqs/`);
 
 /* -------------------------  Clientes  ------------------------------- */
 export const fetchClients = () =>
-  fetch(`${INTERNAL_API}/clientes/`, { cache: "no-store" })
-    .then(toJSON<Client[]>);
+  safeFetch<Client[]>(`${INTERNAL_API}/clientes/`);

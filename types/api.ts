@@ -24,6 +24,16 @@ export interface Product {
   gallery: ProductImage[]; // siempre array (vacío si no hay fotos)
   video_url?: string;
   specifications?: Record<string, string>;
+  hide_price: boolean;
+}
+
+export interface ProductCarouselImage {
+  id: number;
+  title: string;
+  image: string;
+  link: string | null;
+  is_active: boolean;
+  order: number;
 }
 /* ---------- BLOG ---------- */
 export interface BlogPost {

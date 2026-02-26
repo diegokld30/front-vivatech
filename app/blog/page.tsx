@@ -1,7 +1,7 @@
 import { title } from "@/components/primitives";
 import BlogCard from "@/components/BlogCard";
 import { fetchPosts, fetchBlogSidebarImages } from "@/lib/api";
-import { BlogSidebar } from "@/components/blog-sidebar";
+import { BlogBanner } from "@/components/blog-banner";
 import type { BlogPost, BlogSidebarImage } from "@/types/api";
 
 export const metadata = {
@@ -29,28 +29,24 @@ export default async function BlogPage() {
         </p>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-8 items-start">
-        {/* Sidebar Izquierdo (Carrusel) */}
-        <aside className="hidden md:block">
-          <BlogSidebar images={sidebarImages} />
-        </aside>
+      {/* Banner Principal (Carrusel) */}
+      <BlogBanner images={sidebarImages} />
 
-        {/* Contenido Principal (Grid de Posts) */}
-        <div className="flex-grow">
-          {posts.length > 0 ? (
-            <div className="grid gap-8 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-              {posts.map((p) => (
-                <BlogCard key={p.id} post={p} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 bg-default-50 rounded-xl">
-              <p className="text-xl text-default-500">
-                No hay publicaciones disponibles por el momento.
-              </p>
-            </div>
-          )}
-        </div>
+      {/* Grid de Posts */}
+      <div className="mt-8">
+        {posts.length > 0 ? (
+          <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map((p) => (
+              <BlogCard key={p.id} post={p} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-default-50 rounded-xl">
+            <p className="text-xl text-default-500">
+              No hay publicaciones disponibles por el momento.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

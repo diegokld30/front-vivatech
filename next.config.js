@@ -17,12 +17,20 @@ module.exports = {
   /*  ▸ Dominios/paths desde los que Next <Image/> puede
       descargar imágenes (covers, galerías, mapas, …).       */
   images: {
+    unoptimized: true, // Fix: Bypass Next.js optimization to avoid SSL/Port issues in production
     remotePatterns: [
       /* media del backend ─ producción o local  */
       {
         protocol: protocol.replace(":", ""), // "http" | "https"
         hostname: hostname,
         port: "",                                // any port
+        pathname: "/media/**",
+      },
+      /* Fix: Allow port 8443 explicitly for production */
+      {
+        protocol: "https",
+        hostname: hostname, // 138.117.85.187
+        port: "8443",
         pathname: "/media/**",
       },
       /* Fix Docker interne */
@@ -38,6 +46,20 @@ module.exports = {
         hostname: "maps.wikimedia.org",
         pathname: "/**",
       },
+      // Allow general HTTPS in case IP changes or uses different domain
+      {
+        protocol: "https",
+        hostname: "**",
+      }
     ],
+  },
+
+  async rewrites() {
+    return [
+      {
+        source: "/media/:path*",
+        destination: "http://api-vivatech:8000/media/:path*",
+      },
+    ];
   },
 };

@@ -1,6 +1,6 @@
 import { title } from "@/components/primitives";
 import ProductosClient from "./ProductosClient";
-import { fetchProducts, fetchCategories } from "@/lib/api";
+import { fetchProducts, fetchCategories, fetchProductCarouselImages } from "@/lib/api";
 import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductCarousel } from "@/components/product-carousel";
 import type { Product, Category } from "@/types/api";
@@ -18,17 +18,17 @@ export default async function ProductosPage({
 
   // 1. Obtenemos categorías
   // 2. Obtenemos productos filtrados para el GRID
-  // 3. Obtenemos productos destacados para el CARRUSEL (por ahora todos, o los más recientes)
-  const [gridProducts, categories, featuredProducts] = await Promise.all([
+  // 3. Obtenemos imágenes del carrusel
+  const [gridProducts, categories, carouselImages] = await Promise.all([
     fetchProducts(categorySlug),
     fetchCategories(),
-    fetchProducts(), // Trae todos para el carrusel
+    fetchProductCarouselImages(),
   ]);
 
   return (
     <section className="max-w-screen-2xl mx-auto px-4 pb-12">
       {/* 1. Carrusel Superior */}
-      <ProductCarousel products={featuredProducts} />
+      <ProductCarousel images={carouselImages} />
 
       <div className="flex flex-col md:flex-row gap-8 mt-8">
         {/* 2. Sidebar Izquierdo */}

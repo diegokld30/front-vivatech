@@ -6,18 +6,18 @@ import { Button } from "@heroui/button";
 import { Image } from "@heroui/image";
 import NextLink from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // Asumiendo lucide-react o similar, si no usaré texto < >
-import type { Product } from "@/types/api";
+import type { ProductCarouselImage } from "@/types/api";
 
 interface ProductCarouselProps {
-    products: Product[];
+    images: ProductCarouselImage[];
 }
 
-export const ProductCarousel = ({ products }: ProductCarouselProps) => {
+export const ProductCarousel = ({ images }: ProductCarouselProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
 
-    // Filtrar solo productos con imagen de cover válida si es necesario
-    const featuredProducts = products.slice(0, 5); // Tomamos los primeros 5 para el carrusel
+    // Filtrar solo imágenes activas (ya deberían venir filtradas del backend, pero por seguridad)
+    const validImages = images.filter(img => img.is_active);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -30,15 +30,15 @@ export const ProductCarousel = ({ products }: ProductCarouselProps) => {
         setDirection(newDirection);
         setCurrentIndex((prev) => {
             let next = prev + newDirection;
-            if (next < 0) next = featuredProducts.length - 1;
-            if (next >= featuredProducts.length) next = 0;
+            if (next < 0) next = validImages.length - 1;
+            if (next >= validImages.length) next = 0;
             return next;
         });
     };
 
-    if (featuredProducts.length === 0) return null;
+    if (validImages.length === 0) return null;
 
-    const currentProduct = featuredProducts[currentIndex];
+    const currentImage = validImages[currentIndex];
 
     const variants = {
         enter: (direction: number) => ({
@@ -75,25 +75,27 @@ export const ProductCarousel = ({ products }: ProductCarouselProps) => {
                 >
                     <div className="relative w-full h-full">
                         <img
-                            src={currentProduct.cover || "/placeholder.jpg"}
-                            alt={currentProduct.name}
-                            className="w-full h-full object-cover opacity-80"
+                            src={currentImage.image || "/placeholder.jpg"}
+                            alt={currentImage.title}
+                            className="w-full h-full object-cover opacity-90"
                         />
-                        <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-4 text-center">
-                            <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-md">{currentProduct.name}</h2>
-                            <p className="text-lg md:text-xl mb-6 max-w-2xl drop-shadow-sm hidden md:block">
-                                {currentProduct.short_desc}
-                            </p>
-                            <Button
-                                as={NextLink}
-                                href={`/contacto?producto=${currentProduct.slug}`}
-                                color="primary"
-                                radius="full"
-                                size="lg"
-                                className="font-bold shadow-lg"
-                            >
-                                Más información
-                            </Button>
+                        <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center text-white p-4 text-center">
+                            {currentImage.title && (
+                                <h2 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-md">{currentImage.title}</h2>
+                            )}
+
+                            {currentImage.link && (
+                                <Button
+                                    as={NextLink}
+                                    href={currentImage.link}
+                                    color="primary"
+                                    radius="full"
+                                    size="lg"
+                                    className="font-bold shadow-lg"
+                                >
+                                    Más información
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </motion.div>
@@ -115,7 +117,7 @@ export const ProductCarousel = ({ products }: ProductCarouselProps) => {
 
             {/* Indicadores (dots) */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                {featuredProducts.map((_, idx) => (
+                {validImages.map((_, idx) => (
                     <button
                         key={idx}
                         onClick={() => {

@@ -13,8 +13,8 @@ import {
   PhoneIcon,
   MailIcon,
 } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
-const WHATSAPP_NUMBER = "573228271786"; // sin + ni espacios
 
 export default function ContactSection() {
   const [form, setForm] = useState({

@@ -10,7 +10,9 @@ import {
 } from "@heroui/react";
 import type { Product } from "@/types/api";
 import { Image } from "@heroui/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { PlayCircle } from "lucide-react";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 interface ProductModalProps {
     product: Product;
@@ -21,8 +23,30 @@ interface ProductModalProps {
 export const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) => {
     const [selectedImage, setSelectedImage] = useState<string>(product.cover || "/placeholder.jpg");
 
+    // Lógica para detectar si hay video válido
     const isYouTube = product.video_url?.includes("youtube.com") || product.video_url?.includes("youtu.be");
     const videoId = isYouTube ? product.video_url?.split("v=")[1]?.split("&")[0] : null;
+
+    // Estado para controlar si mostramos Video o Imagen
+    // Si hay video, iniciamos mostrándolo. Si no, imagen.
+    const [showVideo, setShowVideo] = useState<boolean>(!!(isYouTube && videoId));
+
+    // Resetear estados cuando cambia el producto abiero
+    useEffect(() => {
+        if (isOpen) {
+            setSelectedImage(product.cover || "/placeholder.jpg");
+            setShowVideo(!!(isYouTube && videoId));
+        }
+    }, [product, isOpen, isYouTube, videoId]);
+
+    const handleSelectImage = (imgSrc: string) => {
+        setSelectedImage(imgSrc);
+        setShowVideo(false); // Ocultar video al seleccionar imagen
+    };
+
+    const handleSelectVideo = () => {
+        setShowVideo(true);
+    };
 
     return (
         <Modal
@@ -42,12 +66,13 @@ export const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) =>
                         <ModalBody>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    {product.video_url && isYouTube && videoId ? (
+                                    {/* VISUALIZADOR PRINCIPAL */}
+                                    {showVideo && isYouTube && videoId ? (
                                         <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-black">
                                             <iframe
                                                 width="100%"
                                                 height="100%"
-                                                src={`https://www.youtube.com/embed/${videoId}`}
+                                                src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
                                                 title="YouTube video player"
                                                 frameBorder="0"
                                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -67,28 +92,42 @@ export const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) =>
                                         </div>
                                     )}
 
-                                    {product.gallery.length > 0 && (
-                                        <div className="flex gap-2 overflow-x-auto py-2">
-                                            {product.cover && (
-                                                <button
-                                                    onClick={() => setSelectedImage(product.cover!)}
-                                                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === product.cover ? 'border-primary' : 'border-transparent'}`}
-                                                >
-                                                    <img src={product.cover} alt="Portada" className="w-full h-full object-cover" />
-                                                </button>
-                                            )}
-                                            {product.gallery.map(img => (
-                                                <button
-                                                    key={img.id}
-                                                    onClick={() => setSelectedImage(img.image)}
-                                                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${selectedImage === img.image ? 'border-primary' : 'border-transparent'}`}
-                                                >
-                                                    <img src={img.image} alt="Galería" className="w-full h-full object-cover" />
-                                                </button>
-                                            ))}
-                                        </div>
-                                    )}
+                                    {/* CARRUSEL DE MINIATURAS (Galería + botón video) */}
+                                    <div className="flex gap-2 overflow-x-auto py-2 px-1">
+                                        {/* Botón para volver al Video (si existe) */}
+                                        {isYouTube && videoId && (
+                                            <button
+                                                onClick={handleSelectVideo}
+                                                className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all flex items-center justify-center bg-black/10 hover:bg-black/20 ${showVideo ? 'border-primary' : 'border-transparent'}`}
+                                                title="Ver Video"
+                                            >
+                                                <PlayCircle className="w-8 h-8 text-danger" />
+                                            </button>
+                                        )}
 
+                                        {/* Portada */}
+                                        {product.cover && (
+                                            <button
+                                                onClick={() => handleSelectImage(product.cover!)}
+                                                className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${!showVideo && selectedImage === product.cover ? 'border-primary' : 'border-transparent'}`}
+                                            >
+                                                <img src={product.cover} alt="Portada" className="w-full h-full object-cover" />
+                                            </button>
+                                        )}
+
+                                        {/* Galería extra */}
+                                        {product.gallery?.map(img => (
+                                            <button
+                                                key={img.id}
+                                                onClick={() => handleSelectImage(img.image)}
+                                                className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${!showVideo && selectedImage === img.image ? 'border-primary' : 'border-transparent'}`}
+                                            >
+                                                <img src={img.image} alt="Galería" className="w-full h-full object-cover" />
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* Botón fallback para video NO-YouTube */}
                                     {product.video_url && !isYouTube && (
                                         <div className="p-4 bg-default-100 rounded-lg">
                                             <p className="text-sm font-semibold mb-2">Video disponible:</p>
@@ -107,11 +146,12 @@ export const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) =>
                                     )}
                                 </div>
 
+                                {/* COLUMNA DERECHA: INFO */}
                                 <div className="space-y-6">
                                     <div>
                                         <h3 className="text-xl font-bold mb-2">Descripción</h3>
                                         <div
-                                            className="text-default-700 rich-text"
+                                            className="text-default-700 rich-text px-1"
                                             dangerouslySetInnerHTML={{ __html: product.description }}
                                         />
                                     </div>
@@ -134,7 +174,7 @@ export const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) =>
                                         </div>
                                     )}
 
-                                    {product.price && (
+                                    {product.price && !product.hide_price && (
                                         <div className="p-4 bg-primary-50 rounded-xl border border-primary-200">
                                             <p className="text-lg font-semibold text-primary-900">Precio estimado</p>
                                             <p className="text-3xl font-bold text-primary-600">
@@ -154,7 +194,14 @@ export const ProductModal = ({ product, isOpen, onClose }: ProductModalProps) =>
                             <Button color="danger" variant="light" onPress={onClose}>
                                 Cerrar
                             </Button>
-                            <Button as="a" href="/contact" color="primary" className="font-semibold shadow-md">
+                            <Button
+                                as="a"
+                                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, estoy interesado en el producto: ${product.name}. Me gustaría recibir una cotización.`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                color="primary"
+                                className="font-semibold shadow-md"
+                            >
                                 Solicitar Cotización
                             </Button>
                         </ModalFooter>
