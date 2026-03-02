@@ -1,15 +1,61 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Card, CardBody, Input, Textarea, Button } from "@heroui/react";
 import { MapPinIcon, PhoneIcon, MailIcon } from "lucide-react";
 
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import type { BranchLocation } from "./BranchesMap";
 
 const BOGOTA_MAP_URL = "https://www.google.com/maps?q=4.615336,-74.083122";
 const CALI_MAP_URL = "https://www.google.com/maps?q=3.440828,-76.463600";
 const PITALITO_MAP_URL =
   "https://www.google.com/maps?q=1.8485303033412692,-76.070617515073";
+
+const MAIN_BRANCH_ADDRESS_LINE_1 = "Carrera 3C #26-18 Sur";
+const MAIN_BRANCH_ADDRESS_LINE_2 = "Urbanización Niza, Pitalito – Huila";
+
+const BRANCHES: readonly BranchLocation[] = [
+  {
+    address: "Carrera 22 #19-37 Paloquemao.",
+    lat: 4.615336,
+    lng: -74.083122,
+    mapUrl: BOGOTA_MAP_URL,
+    name: "Bogotá",
+    phone: "313 818 2482",
+    whatsapp: "573138182482",
+  },
+  {
+    address:
+      "Condominio Industrial la Nubia 1. Bodega 64, 1.5 km después del puente de Juanchito vía Cavasa.",
+    lat: 3.440828,
+    lng: -76.4636,
+    mapUrl: CALI_MAP_URL,
+    name: "Cali",
+    phone: "320 490 4898",
+    whatsapp: "573204904898",
+  },
+] as const;
+
+const MAIN_BRANCH: BranchLocation = {
+  address: `${MAIN_BRANCH_ADDRESS_LINE_1}, ${MAIN_BRANCH_ADDRESS_LINE_2}`,
+  lat: 1.8485303033412692,
+  lng: -76.070617515073,
+  mapUrl: PITALITO_MAP_URL,
+  name: "Sede Principal: Pitalito",
+  phone: "322 827 1786",
+  whatsapp: "573228271786",
+};
+
+const MAP_BRANCHES: readonly BranchLocation[] = [...BRANCHES, MAIN_BRANCH];
+
+const BranchesMap = dynamic(() => import("./BranchesMap"), {
+  loading: () => (
+    <div className="h-64 md:h-72 rounded-xl border border-default-200 bg-default-100 animate-pulse" />
+  ),
+  ssr: false,
+});
 
 export default function ContactSection() {
   const [form, setForm] = useState({
@@ -110,42 +156,39 @@ export default function ContactSection() {
             Nuestras sucursales
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {/* Bogotá */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MapPinIcon className="text-default-400" size={18} />
-                <a
-                  className="font-semibold text-default-700 hover:text-primary hover:underline underline-offset-4"
-                  href={BOGOTA_MAP_URL}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Bogotá
-                </a>
+            {BRANCHES.map((branch) => (
+              <div key={branch.name} className="space-y-3">
+                <p className="flex items-start gap-2 text-default-600">
+                  <MapPinIcon
+                    className="mt-1 flex-shrink-0 text-primary-500"
+                    size={20}
+                  />
+                  <span>
+                    <a
+                      className="font-semibold text-default-700 hover:text-primary hover:underline underline-offset-4"
+                      href={branch.mapUrl}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {branch.name}
+                    </a>
+                    <br />
+                    {branch.address}
+                  </span>
+                </p>
+                <p className="flex items-center gap-2 text-default-600">
+                  <PhoneIcon className="text-primary-500" size={20} />
+                  <a
+                    className="hover:text-primary hover:underline underline-offset-4"
+                    href={`https://wa.me/${branch.whatsapp}`}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {branch.phone}
+                  </a>
+                </p>
               </div>
-              <p className="text-sm text-default-500 pl-7">
-                Carrera 22 #19-37 Paloquemao.
-              </p>
-            </div>
-
-            {/* Cali */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <MapPinIcon className="text-default-400" size={18} />
-                <a
-                  className="font-semibold text-default-700 hover:text-primary hover:underline underline-offset-4"
-                  href={CALI_MAP_URL}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Cali
-                </a>
-              </div>
-              <p className="text-sm text-default-500 pl-7">
-                Condominio Industrial la Nubia 1. Bodega 64, 1.5 km después del
-                puente de Juanchito via Cavasa.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
 
@@ -154,11 +197,11 @@ export default function ContactSection() {
           <h2 className="font-bold text-xl text-primary-700">
             <a
               className="hover:underline underline-offset-4"
-              href={PITALITO_MAP_URL}
+              href={MAIN_BRANCH.mapUrl}
               rel="noopener noreferrer"
               target="_blank"
             >
-              Sede Principal: Pitalito
+              {MAIN_BRANCH.name}
             </a>
           </h2>
           <p className="flex items-start gap-2 text-default-600">
@@ -167,24 +210,30 @@ export default function ContactSection() {
               size={20}
             />
             <span>
-              Carrera 3C #26-18 Sur
+              {MAIN_BRANCH_ADDRESS_LINE_1}
               <br />
-              Urbanización Niza, Pitalito – Huila
+              {MAIN_BRANCH_ADDRESS_LINE_2}
             </span>
           </p>
           <p className="flex items-center gap-2 text-default-600">
-            <PhoneIcon className="text-primary-500" size={20} /> 322 827 1786
+            <PhoneIcon className="text-primary-500" size={20} />
+            <a
+              className="hover:text-primary hover:underline underline-offset-4"
+              href={`https://wa.me/${MAIN_BRANCH.whatsapp}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              {MAIN_BRANCH.phone}
+            </a>
           </p>
           <p className="flex items-center gap-2 text-default-600">
             <MailIcon className="text-primary-500" size={20} />{" "}
             ventas@vivatech.com.co
           </p>
 
-          <iframe
-            className="w-full h-48 rounded-xl border border-default-200 shadow-sm"
-            loading="lazy"
-            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d316.2504121569205!2d-76.070617515073!3d1.8485303033412692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1ses!2sco!4v1751665211399!5m2!1ses!2sco"
-            title="Ubicación Vivatech Pitalito"
+          <BranchesMap
+            branches={MAP_BRANCHES}
+            className="w-full h-64 md:h-72 rounded-xl border border-default-200 shadow-sm"
           />
         </div>
       </div>
