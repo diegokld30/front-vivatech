@@ -1,8 +1,6 @@
 import { Link } from "@heroui/link";
 import {
-  MapPinIcon,
   PhoneIcon,
-  MailIcon,
   FacebookIcon,
   InstagramIcon,
   YoutubeIcon,
@@ -13,7 +11,8 @@ export const Footer = () => {
   const nav = [
     { label: "Inicio", href: "/" },
     { label: "Productos", href: "/productos" },
-    { label: "Clientes", href: "/clients" },
+    { label: "Sobre Nosotros", href: "/about" },
+    { label: "Lomas Planas", href: "/lomas-planas" },
     { label: "FAQs", href: "/faqs" },
     { label: "Blog", href: "/blog" },
     { label: "Contáctanos", href: "/contact" },
@@ -80,21 +79,35 @@ export const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold mb-4">Contacto</h4>
           <ul className="space-y-4">
-            <li className="flex items-start gap-2">
-              <MapPinIcon className="mt-1" size={20} />
-              <span>
-                Carrera 3C #26-18 Sur
-                <br />
-                Urbanización Niza, Pitalito – Huila
-              </span>
+            <li className="flex items-center gap-2">
+              <PhoneIcon size={20} />
+              <Link
+                isExternal
+                className="hover:text-primary-300"
+                href="https://wa.me/573228271786"
+              >
+                322 827 1786 (Principal)
+              </Link>
             </li>
             <li className="flex items-center gap-2">
               <PhoneIcon size={20} />
-              322 827 1786
+              <Link
+                isExternal
+                className="hover:text-primary-300"
+                href="https://wa.me/573138182482"
+              >
+                313 818 2482 (Sucursal Bogotá)
+              </Link>
             </li>
             <li className="flex items-center gap-2">
-              <MailIcon size={20} />
-              ventas@vivatech.com.co
+              <PhoneIcon size={20} />
+              <Link
+                isExternal
+                className="hover:text-primary-300"
+                href="https://wa.me/573204904898"
+              >
+                320 490 4898 (Sucursal Cali)
+              </Link>
             </li>
           </ul>
         </div>
@@ -103,7 +116,11 @@ export const Footer = () => {
       {/* ---- Línea inferior ---- */}
       <div className="border-t border-primary-700 mt-10 pt-4 text-sm text-center px-6">
         © {year} Vivatech •{" "}
-        <Link className="hover:text-primary-300" href="/politica-privacidad">
+        <Link
+          isExternal
+          className="hover:text-primary-300"
+          href="/Politica_privacidad_tratamiento_de_datos.pdf"
+        >
           Política de privacidad
         </Link>
       </div>

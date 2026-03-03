@@ -59,23 +59,36 @@ export interface Faq {
   answer: string;
 }
 
-/* --- CLIENTES ----------------------------------------------------------- */
+/* --- PROYECTOS (antes Clientes) ------------------------------------ */
 
-export interface ClientImage {
+export interface ProjectImage {
   id: number;
   image: string;
   alt: string | null;
 }
 
-export interface Client {
+export interface Project {
   id: number;
   name: string;
   slug: string;
   logo: string | null;
   cover: string | null;
   testimonial: string;
+  content: string;
+  video_url?: string | null;
   location: string;
   latitude: string | null;
   longitude: string | null;
-  gallery: ClientImage[];
+  gallery: ProjectImage[];
+}
+
+export interface ProjectBanner {
+  id: number;
+  title: string;
+  description: string;
+  image: string | null;
+  video_url: string | null;
+  is_active: boolean;
+  order: number;
+  created_at: string;
 }

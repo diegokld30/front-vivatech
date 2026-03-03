@@ -187,6 +187,17 @@ export default function ContactSection() {
                     {branch.phone}
                   </a>
                 </p>
+                {branch.name === "Bogotá" && (
+                  <p className="flex items-center gap-2 text-default-600">
+                    <MailIcon className="text-primary-500" size={20} />
+                    <a
+                      className="hover:text-primary hover:underline underline-offset-4"
+                      href="mailto:comercial@vivatech.com.co"
+                    >
+                      comercial@vivatech.com.co
+                    </a>
+                  </p>
+                )}
               </div>
             ))}
           </div>
@@ -227,8 +238,13 @@ export default function ContactSection() {
             </a>
           </p>
           <p className="flex items-center gap-2 text-default-600">
-            <MailIcon className="text-primary-500" size={20} />{" "}
-            ventas@vivatech.com.co
+            <MailIcon className="text-primary-500" size={20} />
+            <a
+              className="hover:text-primary hover:underline underline-offset-4"
+              href="mailto:ventas@vivatech.com.co"
+            >
+              ventas@vivatech.com.co
+            </a>
           </p>
 
           <BranchesMap

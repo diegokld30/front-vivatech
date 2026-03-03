@@ -6,8 +6,8 @@ export const siteConfig = {
   navItems: [
     { label: "Inicio", href: "/" },
     { label: "Productos", href: "/productos" },
-    // { label: "Kit solar", href: "/kit-solar" },
-    { label: "Clientes", href: "/clients" },
+    { label: "Sobre Nosotros", href: "/about" },
+    { label: "Lomas Planas", href: "/lomas-planas" },
     { label: "FAQs", href: "/faqs" },
     { label: "Blog", href: "/blog" },
     { label: "Contáctanos", href: "/contact" },
@@ -15,8 +15,8 @@ export const siteConfig = {
   navMenuItems: [
     { label: "Inicio", href: "/" },
     { label: "Productos", href: "/productos" },
-    // { label: "Kit solar", href: "/kit-solar" },
-    { label: "Clientes", href: "/clients" },
+    { label: "Sobre Nosotros", href: "/about" },
+    { label: "Lomas Planas", href: "/lomas-planas" },
     { label: "FAQs", href: "/faqs" },
     { label: "Blog", href: "/blog" },
     { label: "Contáctanos", href: "/contact" },

@@ -16,6 +16,11 @@ type BlogPostForSitemap = {
   published_at?: string | null;
 };
 
+type ProjectForSitemap = {
+  slug: string;
+  created_at?: string | null;
+};
+
 type UrlItem = {
   loc: string;
   changefreq: "daily" | "weekly" | "monthly";
@@ -46,18 +51,32 @@ async function fetchBlogPosts(): Promise<BlogPostForSitemap[]> {
   return Array.isArray(data) ? data : [];
 }
 
+async function fetchProjects(): Promise<ProjectForSitemap[]> {
+  const response = await fetch(`${API_BASE}/clientes/`, {
+    next: { revalidate: ONE_DAY },
+  });
+
+  if (!response.ok) return [];
+  const data = (await response.json()) as ProjectForSitemap[];
+
+  return Array.isArray(data) ? data : [];
+}
+
 export async function GET(_req: NextRequest) {
   const staticPages: UrlItem[] = [
     { changefreq: "weekly", loc: `${BASE_URL}/`, priority: "1.0" },
     { changefreq: "daily", loc: `${BASE_URL}/productos`, priority: "0.95" },
-    { changefreq: "weekly", loc: `${BASE_URL}/clients`, priority: "0.85" },
+    { changefreq: "weekly", loc: `${BASE_URL}/about`, priority: "0.7" },
+    { changefreq: "weekly", loc: `${BASE_URL}/lomas-planas`, priority: "0.85" },
     { changefreq: "weekly", loc: `${BASE_URL}/faqs`, priority: "0.85" },
     { changefreq: "daily", loc: `${BASE_URL}/blog`, priority: "0.9" },
-    { changefreq: "monthly", loc: `${BASE_URL}/about`, priority: "0.7" },
     { changefreq: "weekly", loc: `${BASE_URL}/contact`, priority: "0.8" },
   ];
 
-  const blogPosts = await fetchBlogPosts();
+  const [blogPosts, projects] = await Promise.all([
+    fetchBlogPosts(),
+    fetchProjects(),
+  ]);
 
   const blogUrls: UrlItem[] = blogPosts.map((post) => ({
     changefreq: "weekly",
@@ -65,6 +84,10 @@ export async function GET(_req: NextRequest) {
     loc: `${BASE_URL}/blog/${post.slug}`,
     priority: "0.8",
   }));
+
+  // Proyectos dinámicos (por ahora no tienen subpágina individual,
+  // pero prepara el sitemap para cuando existan)
+  const _projectSlugs = projects.map((p) => p.slug);
 
   const urls: UrlItem[] = [...staticPages, ...blogUrls];
 

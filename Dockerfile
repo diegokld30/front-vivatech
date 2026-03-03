@@ -1,10 +1,13 @@
-########################  BUILD STAGE  ########################
-FROM node:22.17.0-alpine3.22 AS builder
+########################  DEV STAGE  ########################
+FROM node:22.17.0-alpine3.22 AS dev
 WORKDIR /app
 
 # Dependencias de Node
 COPY package*.json ./
 RUN npm ci --ignore-scripts
+
+########################  BUILD STAGE  ########################
+FROM dev AS builder
 
 # Copiamos el código
 COPY . .

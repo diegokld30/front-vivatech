@@ -1,10 +1,10 @@
 /* lib/api.ts ------------------------------------------------------------*/
-import type { Product, BlogPost, Faq, Client, Category } from "@/types/api";
+import type { Product, BlogPost, Faq, Project, ProjectBanner, Category } from "@/types/api";
 
 /**
  *  ───────────────────────────────────────────────────────────────────
  *  ▸ PUBLIC_API  →  lo que usa el navegador (NEXT_PUBLIC_API_URL)
- *  ▸ INTERNAL    →  disponible durante next build / SSR
+ *  ▸ INTERNAL    →  disponible durante next build / SSR
  *                  (se define como INTERNAL_API_URL en docker‑compose)
  *  Si INTERNAL_API_URL no existe, usamos la pública (útil en local).
  *  ───────────────────────────────────────────────────────────────────
@@ -106,6 +106,9 @@ export const fetchBlogSidebarImages = () =>
 /* -------------------------  FAQs  ----------------------------------- */
 export const fetchFaqs = () => safeFetch<Faq[]>(`${INTERNAL_API}/faqs/`);
 
-/* -------------------------  Clientes  ------------------------------- */
-export const fetchClients = () =>
-  safeFetch<Client[]>(`${INTERNAL_API}/clientes/`);
+/* -------------------------  Proyectos (antes Clientes)  -------------- */
+export const fetchProjects = () =>
+  safeFetch<Project[]>(`${INTERNAL_API}/clientes/`);
+
+export const fetchProjectBanners = () =>
+  safeFetch<ProjectBanner[]>(`${INTERNAL_API}/clientes/banners/`);

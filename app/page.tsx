@@ -47,30 +47,17 @@ export default function Home() {
           Potencia tu finca con equipos robustos y soporte experto.
         </p>
 
-        {/* Botones */}
-        {/* Botones */}
-        <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-4">
-          <Button
-            download
-            as="a"
-            className="shadow-lg"
-            color="primary"
-            href="/catalogo.pdf"
-            radius="full"
-            size="lg" // mismo alto
-          >
-            Descargar catálogo
-          </Button>
-
+        {/* Botón único */}
+        <div className="flex items-center justify-center">
           <Button
             as="a"
+            className="shadow-lg px-8"
             color="primary"
             href="/productos"
             radius="full"
-            size="lg" // mismo alto
-            variant="bordered"
+            size="lg"
           >
-            Conocer más
+            Nuestros Productos
           </Button>
         </div>
       </section>
