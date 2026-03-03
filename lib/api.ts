@@ -1,5 +1,5 @@
 /* lib/api.ts ------------------------------------------------------------*/
-import type { Product, BlogPost, Faq, Project, ProjectBanner, Category } from "@/types/api";
+import type { Product, BlogPost, Faq, Project, ProjectBanner, AboutSection, Category } from "@/types/api";
 
 /**
  *  ───────────────────────────────────────────────────────────────────
@@ -112,3 +112,7 @@ export const fetchProjects = () =>
 
 export const fetchProjectBanners = () =>
   safeFetch<ProjectBanner[]>(`${INTERNAL_API}/clientes/banners/`);
+
+/* -------------------------  Sobre Nosotros  -------------------------- */
+export const fetchAboutSections = () =>
+  safeFetch<AboutSection[]>(`${INTERNAL_API}/about/`);

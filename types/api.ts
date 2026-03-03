@@ -92,3 +92,34 @@ export interface ProjectBanner {
   order: number;
   created_at: string;
 }
+
+/* --- SOBRE NOSOTROS --------------------------------------------------- */
+
+export interface AboutStat {
+  id: number;
+  label: string;
+  value: string;
+  icon: string;
+  order: number;
+}
+
+export interface AboutGalleryImage {
+  id: number;
+  image: string;
+  alt: string;
+  order: number;
+}
+
+export interface AboutSection {
+  id: number;
+  section_type: "hero" | "text" | "stats" | "gallery" | "cta";
+  title: string;
+  subtitle: string;
+  body: string;
+  image: string | null;
+  background_color: string;
+  order: number;
+  is_active: boolean;
+  stats: AboutStat[];
+  gallery_images: AboutGalleryImage[];
+}
