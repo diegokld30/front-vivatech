@@ -49,7 +49,7 @@ export const Footer = () => {
               <Link
                 isExternal
                 className="inline-flex items-center gap-2 hover:text-blue-400"
-                href="https://facebook.com/vivatech"
+                href="https://www.facebook.com/vivatechtecnologia"
               >
                 <FacebookIcon size={20} /> Vivatech
               </Link>
@@ -67,9 +67,21 @@ export const Footer = () => {
               <Link
                 isExternal
                 className="inline-flex items-center gap-2 hover:text-red-500"
-                href="https://youtube.com/@vivatech"
+                href="https://www.youtube.com/@Vivatech_colombia"
               >
                 <YoutubeIcon size={20} /> Vivatech: tecnología para el campo
+              </Link>
+            </li>
+            <li>
+              <Link
+                isExternal
+                className="inline-flex items-center gap-2 hover:text-default-300"
+                href="https://www.tiktok.com/@vivatech_colombia"
+              >
+                <svg aria-hidden className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.88-2.88 2.89 2.89 0 0 1 2.88-2.88c.28 0 .56.04.82.1v-3.5a6.37 6.37 0 0 0-.82-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.75a8.18 8.18 0 0 0 4.76 1.52V6.83a4.84 4.84 0 0 1-1-.14Z" />
+                </svg>
+                @vivatech_colombia
               </Link>
             </li>
           </ul>

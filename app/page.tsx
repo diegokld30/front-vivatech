@@ -35,17 +35,11 @@ export default function Home() {
           })}
         >
           Maquinaria&nbsp;
-          <span className="text-primary-300 font-extrabold">verde&nbsp;</span>
-          que multiplica tu cosecha
+          <span className="text-primary-300 font-extrabold">compacta&nbsp;</span>
+          para impulsar tu productividad
         </h1>
 
-        <p
-          className={subtitle({
-            className: "max-w-xl text-center mb-10 text-gray-200",
-          })}
-        >
-          Potencia tu finca con equipos robustos y soporte experto.
-        </p>
+        <div className="mb-10" />
 
         {/* Botón único */}
         <div className="flex items-center justify-center">
