@@ -89,9 +89,8 @@ export const fetchPosts = () =>
   safeFetch<BlogPost[]>(`${INTERNAL_API}/blog/posts/`);
 
 export const fetchPost = (slug: string) =>
-  fetch(`${INTERNAL_API}/blog/posts/?slug=${slug}`)
-    .then((r) => r.json())
-    .then((data: BlogPost[]) => data[0] ?? null)
+  safeFetch<BlogPost[]>(`${INTERNAL_API}/blog/posts/?slug=${slug}`)
+    .then((data) => data[0] ?? null)
     .catch((err) => {
       console.error("fetchPost error:", err);
 

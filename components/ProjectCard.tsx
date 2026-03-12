@@ -79,19 +79,19 @@ function ProjectCardThumbnail({
                     <>
                         <button
                             aria-label="Anterior"
-                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/60 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/60 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white z-20"
                             onClick={prev}
                         >
                             <ChevronLeft size={18} />
                         </button>
                         <button
                             aria-label="Siguiente"
-                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/60 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/60 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white z-20"
                             onClick={next}
                         >
                             <ChevronRight size={18} />
                         </button>
-                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5">
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
                             {allImages.map((_, i) => (
                                 <span
                                     key={i}
@@ -111,12 +111,13 @@ function ProjectCardThumbnail({
                 )}
 
                 {/* Overlay hover */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 pointer-events-none">
                     <Button
-                        className="font-semibold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                        className="font-semibold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 pointer-events-auto"
                         color="primary"
                         radius="full"
                         variant="solid"
+                        onPress={onClick}
                     >
                         Ver más
                     </Button>

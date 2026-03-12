@@ -31,7 +31,7 @@ export default function Home() {
         {/* Texto */}
         <h1
           className={title({
-            class: "text-center text-4xl md:text-6xl lg:text-7xl",
+            class: "text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl px-4",
           })}
         >
           Maquinaria&nbsp;

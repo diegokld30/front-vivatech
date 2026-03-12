@@ -49,7 +49,7 @@ export const Footer = () => {
               <Link
                 isExternal
                 className="inline-flex items-center gap-2 hover:text-blue-400"
-                href="https://www.facebook.com/vivatechtecnologia"
+                href="https://www.facebook.com/vivatech.colombia/"
               >
                 <FacebookIcon size={20} /> Vivatech
               </Link>
@@ -131,7 +131,7 @@ export const Footer = () => {
         <Link
           isExternal
           className="hover:text-primary-300"
-          href="/Politica_privacidad_tratamiento_de_datos.pdf"
+          href="/Marco%20Legal.pdf"
         >
           Política de privacidad
         </Link>
