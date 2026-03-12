@@ -6,7 +6,7 @@ import {
   fetchProducts,
   fetchCategories,
   fetchProductCarouselImages,
-} from "@/lib/api";
+} from "../../lib/api";
 import { CategorySidebar } from "@/components/category-sidebar";
 import { ProductCarousel } from "@/components/product-carousel";
 

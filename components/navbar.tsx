@@ -19,7 +19,7 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useScrolled } from "@/components/useScrolled";
-import { ProductsDropdown } from "@/components/products-dropdown";
+import { ProductsDropdown } from "./products-dropdown";
 
 export const Navbar = () => {
   const pathname = usePathname();

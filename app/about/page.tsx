@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { fetchAboutSections } from "@/lib/api";
+import { fetchAboutSections } from "../../lib/api";
 import type { AboutSection } from "@/types/api";
 
 import AboutClient from "./AboutClient";

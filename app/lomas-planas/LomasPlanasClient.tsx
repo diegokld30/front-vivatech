@@ -8,7 +8,7 @@ import ProjectBannerSection from "@/components/ProjectBannerSection";
 import {
     ProjectCardThumbnail,
     ProjectDetailModal,
-} from "@/components/ProjectCard";
+} from "../../components/ProjectCard";
 
 interface Props {
     projects: Project[];

@@ -1,7 +1,7 @@
 import type { Faq } from "@/types/api";
 
 import { subtitle } from "@/components/primitives";
-import { fetchFaqs } from "@/lib/api";
+import { fetchFaqs } from "../../lib/api";
 import FaqAccordion from "@/components/FaqAccordion"; // ← importa directo
 
 /* ----------- META ---------- */

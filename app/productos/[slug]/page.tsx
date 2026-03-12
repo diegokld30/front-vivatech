@@ -6,7 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@heroui/button";
 
-import { fetchProductBySlug } from "@/lib/api";
+import { fetchProductBySlug } from "../../../lib/api";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 const SITE_URL = (

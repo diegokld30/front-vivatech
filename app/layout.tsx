@@ -8,7 +8,7 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
+import { Footer } from "../components/footer";
 
 /* ------------ META ------------ */
 export const metadata: Metadata = {
@@ -38,7 +38,6 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="es">
-      <head />
       {/* ① body → flex-col y min-h-screen  */}
       <body
         className={clsx(

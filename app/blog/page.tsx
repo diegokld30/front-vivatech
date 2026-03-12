@@ -1,6 +1,6 @@
 import { title } from "@/components/primitives";
 import BlogCard from "@/components/BlogCard";
-import { fetchPosts, fetchBlogSidebarImages } from "@/lib/api";
+import { fetchPosts, fetchBlogSidebarImages } from "../../lib/api";
 import { BlogBanner } from "@/components/blog-banner";
 
 export const metadata = {

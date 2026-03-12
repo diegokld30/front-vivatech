@@ -1,13 +1,17 @@
+ARG NODE_BASE_IMAGE=node:22.17.0-alpine3.22
+
 ########################  DEV STAGE  ########################
-FROM node:22.17.0-alpine3.22 AS dev
+FROM ${NODE_BASE_IMAGE} AS dev
 WORKDIR /app
+RUN find /app -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
 # Dependencias de Node
 COPY package*.json ./
-RUN npm ci --ignore-scripts
+RUN npm ci --include=dev --ignore-scripts
 
 ########################  BUILD STAGE  ########################
 FROM dev AS builder
+ENV NODE_ENV=production
 
 # Copiamos el código
 COPY . .
@@ -26,8 +30,9 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
 RUN npm run build
 
 ########################  RUNTIME STAGE  ######################
-FROM node:22.17.0-alpine3.22
+FROM ${NODE_BASE_IMAGE}
 WORKDIR /app
+RUN find /app -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
 ENV NODE_ENV=production \
     PORT=3000 \

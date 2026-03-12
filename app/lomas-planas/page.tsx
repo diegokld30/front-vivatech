@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { fetchProjects, fetchProjectBanners } from "@/lib/api";
+import { fetchProjects, fetchProjectBanners } from "../../lib/api";
 import type { ProjectBanner } from "@/types/api";
 
 import LomasPlanasClient from "./LomasPlanasClient";

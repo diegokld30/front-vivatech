@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 
 import { ChevronDownIcon } from "@/components/icons";
 import { Category } from "@/types/api";
-import { fetchCategories } from "@/lib/api";
+import { fetchCategories } from "../lib/api";
 
 export const ProductsDropdown = () => {
   const [categories, setCategories] = useState<Category[]>([]);

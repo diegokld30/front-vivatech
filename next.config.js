@@ -1,5 +1,6 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
+const path = require("path");
 const backendURL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 const { hostname, protocol } = new URL(backendURL);
 
@@ -61,5 +62,14 @@ module.exports = {
         destination: "http://api-vivatech:8000/media/:path*",
       },
     ];
+  },
+
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      "@": path.resolve(__dirname),
+    };
+
+    return config;
   },
 };
