@@ -15,14 +15,14 @@ export default function Home() {
        rompe los márgenes de <main class="container …">   */
     <div className="relative -mt-6 w-screen left-1/2 right-1/2 -translate-x-1/2 overflow-hidden">
       <section className="relative h-[92vh] flex flex-col items-center justify-center text-white">
-        {/* Imagen de fondo  */}
-        <Image
-          fill
-          priority
-          className="object-cover object-center -z-20 select-none pointer-events-none"
-          sizes="100vw"
-          src="/vivatechEntrada.png" /* debe existir en /public */
-          alt="Maquinaria agrícola Vivatech"
+        {/* Video de fondo */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover object-center -z-20 select-none pointer-events-none"
+          src="/banner%20inicio%20sonrisa.mov"
         />
 
         {/* Degradado verde semitransparente */}
