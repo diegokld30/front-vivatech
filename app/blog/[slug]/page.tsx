@@ -41,7 +41,7 @@ export default async function BlogPostPage({
 
       <div
         dangerouslySetInnerHTML={{ __html: post.content }}
-        className="prose max-w-none"
+        className="rich-text"
       />
     </article>
   );

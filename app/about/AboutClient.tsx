@@ -148,7 +148,7 @@ function HeroSection({ section }: { section: AboutSection }) {
 
                     <motion.h1
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[1.1] tracking-tight"
+                        className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-[1.1] tracking-tight text-center"
                         initial={{ opacity: 0, y: 20 }}
                         transition={{ delay: 0.3, duration: 0.7 }}
                     >
@@ -158,7 +158,7 @@ function HeroSection({ section }: { section: AboutSection }) {
                     {section.subtitle && (
                         <motion.p
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-primary-200/90 text-lg md:text-xl mb-6 max-w-lg leading-relaxed"
+                            className="text-primary-200/90 text-lg md:text-xl mb-6 max-w-lg leading-relaxed mx-auto"
                             initial={{ opacity: 0, y: 20 }}
                             transition={{ delay: 0.5, duration: 0.7 }}
                         >
@@ -169,7 +169,7 @@ function HeroSection({ section }: { section: AboutSection }) {
                     {section.body && (
                         <motion.div
                             animate={{ opacity: 1 }}
-                            className="text-primary-100/80 rich-text max-w-lg text-base leading-relaxed"
+                            className="text-primary-100/80 rich-text max-w-lg text-base leading-relaxed mx-auto"
                             dangerouslySetInnerHTML={{ __html: section.body }}
                             initial={{ opacity: 0 }}
                             transition={{ delay: 0.7, duration: 0.7 }}
@@ -352,7 +352,7 @@ function GallerySection({ section }: { section: AboutSection }) {
                 )}
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
                 {images.map((img, i) => (
                     <motion.div
                         key={img.id}
