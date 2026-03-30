@@ -79,7 +79,7 @@ export const ProductModal = ({
             </ModalHeader>
             <ModalBody>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
+                <div className="space-y-4 md:sticky md:top-0 h-fit self-start">
                   {/* VISUALIZADOR PRINCIPAL */}
                   {showVideo && isYouTube && videoId ? (
                     <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-black">

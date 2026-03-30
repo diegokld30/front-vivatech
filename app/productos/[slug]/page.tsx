@@ -111,7 +111,7 @@ export default async function ProductDetailPage({ params }: Props) {
       </nav>
 
       <div className="grid gap-8 md:grid-cols-2">
-        <div className="rounded-2xl border border-default-200 bg-white p-4 shadow-sm">
+        <div className="rounded-2xl border border-default-200 bg-white p-4 shadow-sm md:sticky md:top-24 h-fit self-start">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-white">
             <Image
               fill
@@ -130,7 +130,10 @@ export default async function ProductDetailPage({ params }: Props) {
           <h1 className="text-3xl font-bold tracking-tight">{product.name}</h1>
 
           {product.short_desc ? (
-            <p className="text-default-600">{product.short_desc}</p>
+            <div
+                dangerouslySetInnerHTML={{ __html: product.short_desc }}
+                className="text-default-600 rich-text"
+            />
           ) : null}
 
           {!product.hide_price && product.price ? (

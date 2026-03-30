@@ -202,7 +202,7 @@ function ProjectDetailModal({
                         <ModalBody>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {/* COLUMNA IZQUIERDA: medios */}
-                                <div className="space-y-4">
+                                <div className="space-y-4 md:sticky md:top-0 h-fit self-start">
                                     {/* Visor principal */}
                                     {showVideo && isYouTube && videoId ? (
                                         <div className="w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-black">
@@ -286,7 +286,10 @@ function ProjectDetailModal({
                                     {project.testimonial && (
                                         <div>
                                             <h3 className="text-xl font-bold mb-2">Resumen</h3>
-                                            <p className="text-default-700">{project.testimonial}</p>
+                                            <div
+                                                dangerouslySetInnerHTML={{ __html: project.testimonial }}
+                                                className="text-default-700 rich-text px-1"
+                                            />
                                         </div>
                                     )}
 
